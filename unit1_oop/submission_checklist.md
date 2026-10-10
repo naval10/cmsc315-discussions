@@ -29,10 +29,10 @@ Use this checklist before submitting your weekly discussion.
 - [x] My GitHub repository is organized and readable.
 
 ## Discussion Checklist
-- [ ] I explained my design approach in the initial post of the discussion board.
-- [ ] I posted my GitHub repo link in the discussion board.
-- [ ] I responded to at least **two classmates**.
-- [ ] Each peer reply is meaningful and references specific code or explanations.
+- [x] I explained my design approach in the initial post of the discussion board.
+- [x] I posted my GitHub repo link in the discussion board.
+- [x] I responded to at least **two classmates**.
+- [x] Each peer reply is meaningful and references specific code or explanations.
 
 
 
