@@ -33,7 +33,3 @@ Use this checklist before submitting your weekly discussion.
 - [x] I posted my GitHub repo link in the discussion board.
 - [ ] I responded to at least **two classmates**.
 - [ ] Each peer reply is meaningful and references specific code or explanations.
-
-## Local Verification Note
-
-All 12 original `TODO (Student)` prompts were retained and completed. The Unit 2 folder contained the completed Python file, updated README, discussion draft, and this checklist. The Python demonstrations and assertions passed locally. The discussion draft included the design approach and repository link, but the discussion checkboxes remained unchecked because posting and peer responses had not been confirmed. Running the program in IntelliJ also remained unconfirmed.
