@@ -1,3 +1,59 @@
+# Unit 2: Text Editor Undo and Support Desk Queue
+
+## Completed Implementation
+
+I implemented `Stack` with a Python list and `Queue` with `collections.deque`. I retained all 12 original TODO prompts and added comments explaining LIFO, FIFO, and non-removing previews. I placed the demonstrations inside `main()` so importing the classes did not run the examples.
+
+### Stack and queue operations
+
+- I implemented `push()`, `pop()`, `peek()`, and `is_empty()` for the stack.
+- I implemented `enqueue()`, `dequeue()`, `front()`, and `is_empty()` for the queue.
+- I added and removed stack values at the same end to demonstrate LIFO.
+- I added queue values at the back and removed them from the front to demonstrate FIFO.
+- I used `peek()` and `front()` to preview values without removing them.
+
+### Error handling and testing
+
+I ran the starter, which printed placeholders, and then ran the completed program from the Unit 2 folder with:
+
+```bash
+python3 unit2_discussion.py
+```
+
+I used Python 3 and the standard-library `collections` module. On Windows, the equivalent command was `py unit2_discussion.py` when the Python launcher was installed.
+
+| Case tested | Result observed |
+| --- | --- |
+| Four stack values | Values were removed in reverse insertion order. |
+| Four queue values | Values were removed in insertion order. |
+| Stack peek and queue front | The previewed value remained available for removal. |
+| Empty stack pop and peek | Descriptive `IndexError` exceptions were caught. |
+| Empty queue dequeue and front | Descriptive `IndexError` exceptions were caught. |
+| Single-item structures | Each structure became empty after removal. |
+| Duplicate values | Both copies were retained and removed in the correct order. |
+| Zero, empty string, and None | These valid stored values were preserved. |
+| Interleaved additions and removals | LIFO and FIFO ordering remained correct. |
+
+The completed run ended with `All ordering, preview, empty, single-item, and extra assertions passed.` I caught expected exceptions around individual operations so the demonstrations continued. Unexpected failures were not silently suppressed. Assertions provided checks when Python ran without optimization.
+
+### Memory behavior and growth
+
+I analyzed each container as using O(n) storage for n item references, with additional memory for the stored objects. Longer text required additional storage. I did not impose a fixed capacity, so the structures could grow until limited by available memory.
+
+I used amortized O(1) list append and end-pop operations for the stack and O(1) deque endpoint operations for the queue. Preview and empty checks took O(1). Using `popleft()` avoided the shifting required by `list.pop(0)`.
+
+### Practical application and design reflection
+
+I demonstrated a text-editor undo history with the stack and a support-desk ticket line with the queue. Each example added four values and displayed their removal order. LIFO matched undoing the newest edit first, while FIFO matched processing tickets in arrival order.
+
+I chose exceptions for empty operations so an empty structure could be distinguished from a valid stored `None`. I accepted arbitrary values in these general-purpose structures; a ticket application could separately validate ticket descriptions. For a larger application, I considered a capacity limit with an explicit full-queue response to control memory growth.
+
+## Submission Status
+
+I completed and locally checked the Python implementation and prepared a separate discussion draft in `discussion_post.md`. I added the repository link to that draft and recorded completed work in `submission_checklist.md`. IntelliJ verification, discussion submission, and two peer responses remained unconfirmed.
+
+## Original Assignment Instructions (Retained)
+
 # Unit 2 Discussion: Stacks and Queues
 
 ## Overview
@@ -34,58 +90,3 @@ Your reflection should be approximately 150–200 words and address the followin
 1. What concepts or skills did you learn while completing this assignment?
 2. What challenges did you encounter, and how did you overcome them?
 3. Explain the differences between stacks and queues as this relates to real-world applications.
-
-## Completed implementation
-
-I implemented Stack with a Python list and Queue with collections.deque. I kept every TODO prompt and added comments explaining LIFO, FIFO, and non-removing previews. I moved the demonstration code inside main so importing the classes did not run the examples.
-
-I used a text-editor undo history for the stack and a support-desk ticket line for the queue. Each demonstration added four values, previewed the next value, and removed all values in the expected order.
-
-### Design decisions
-
-I used append and pop at the end of the list for stack operations. I used append and popleft on the deque for queue operations, which avoided shifting remaining elements as list.pop(0) would have done.
-
-I raised IndexError with a descriptive message when a removal or preview was attempted on an empty structure. The demonstration caught these expected exceptions and continued. I allowed arbitrary stored values, including None, zero, and empty strings; those values were valid data rather than signals for an empty structure. I did not impose a fixed capacity.
-
-### Verification
-
-I ran the starter before editing; it printed instructions but did not implement the operations. After completing it, I ran:
-
-```bash
-python3 unit2_stacks_queues/unit2_discussion.py
-```
-
-I verified the following with assertions:
-- Stack removals followed reverse insertion order.
-- Queue removals followed insertion order.
-- Preview operations left the next value available for removal.
-- Empty removals and previews raised IndexError.
-- Single-item structures became empty after removal.
-- Duplicate values and falsy values were preserved.
-- Interleaved additions and removals preserved the correct order.
-
-The completed run ended with:
-```text
-All ordering, preview, empty, single-item, and extra assertions passed.
-```
-
-### Efficiency and memory
-
-I used operations with O(1) deque endpoint costs and amortized O(1) list append and end-pop costs. Preview and empty checks took O(1). I analyzed container storage as O(n) for n references, with additional memory for the stored objects. I recognized that these dynamically growing structures were still limited by available memory.
-
-### Checklist review
-
-I completed the code, comments, custom scenarios, additional tests, edge cases, and README documentation. I retained the original TODO prompts. Running the program in IntelliJ and posting the discussion and two peer responses remained user-side steps.
-
-## Completed discussion reflection
-
-GitHub repository: https://github.com/naval10/cmsc315-discussions
-
-For this assignment, I implemented a stack with a Python list and a queue with collections.deque. I used text-editor actions to demonstrate undo behavior and support tickets to demonstrate requests being processed in arrival order. Keeping each operation in its own method made the code easier to follow and test.
-
-A stack uses last-in, first-out (LIFO) because items are added and removed at the same end, called the top. The most recent edit is therefore undone first. A queue uses first-in, first-out (FIFO) because items enter at the back and leave from the front. This fits a support desk that handles tickets in arrival order.
-
-One challenge was distinguishing an empty structure from a valid stored value such as None. I handled invalid removals and previews with clear IndexError messages. I also tested empty structures, single items, repeated values, and interleaved operations.
-
-Both structures use O(n) storage for n item references. Adding more items increases memory use, and longer stored descriptions require additional space. This assignment helped me connect predictable ordering with practical application design.
-
