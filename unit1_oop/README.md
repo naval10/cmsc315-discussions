@@ -60,6 +60,16 @@ For this fixed set of attributes, a shallow object copy added O(1) storage relat
 
 I connected the example to home networking and my interest in cybersecurity. A firewall reused general device information while adding specialized rule operations. Encapsulation concentrated validation in one place, and inheritance avoided repeating the device setup. The design could have supported future monitoring tools with additional device subclasses. For a small one-time task, procedural functions would have required less structure; for related device types, the class design made maintenance and reuse easier.
 
+### Deciding when shared data was acceptable
+
+I based my decision on whether a change was supposed to affect both objects. Sharing immutable strings, such as device labels and rule text, was acceptable because those strings could not be changed in place. Assigning a different string to one object's attribute did not rewrite the string referenced by another object.
+
+I treated the mutable rule list differently. A shallow copy was acceptable for demonstrating two objects that intentionally referenced the same current configuration. In that situation, seeing a new rule through both objects was expected. However, I did not treat a shallow copy as an independent backup or a separate firewall configuration. Adding or removing a rule through either copy changed their shared list, which could create unintended configuration changes if the objects were assumed to be independent.
+
+For a configuration snapshot or a trial change, I chose a deep copy so the nested dictionary and list were independent. In the demonstration, adding a rule to the original also changed the shallow copy, while the deep copy kept its earlier rules. Those results and the identity checks confirmed why independence mattered. Separately constructed firewall objects also received their own settings and rule lists.
+
+I balanced that isolation against memory and copying costs. I accepted the additional storage for an independent mutable configuration when preserving earlier settings mattered. For read-only access to the rules, I used the existing tuple snapshot instead of copying the entire object. Because the tuple contained immutable strings, it let callers inspect the rules without modifying the internal list. This helped me distinguish three needs: intentionally shared current data, a stable read-only view, and an independently editable copy.
+
 ## Submission Status
 
 I completed and locally checked the Python implementation and prepared a discussion draft in `discussion_post.md`. I added the repository link to the discussion draft. Discussion submission and two peer responses remained pending.
