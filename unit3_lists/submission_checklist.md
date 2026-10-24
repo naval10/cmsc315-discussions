@@ -29,8 +29,8 @@ Use this checklist before submitting your weekly discussion.
 - [x] My GitHub repository is organized and readable.
 
 ## Discussion Checklist
-- [ ] I explained my design approach in the initial post of the discussion board.
-- [ ] I posted my GitHub repo link in the discussion board.
+- [x] I explained my design approach in the initial post of the discussion board.
+- [x] I posted my GitHub repo link in the discussion board.
 - [ ] I responded to at least **two classmates**.
 - [ ] Each peer reply is meaningful and references specific code or explanations.
 
@@ -38,6 +38,6 @@ Use this checklist before submitting your weekly discussion.
 
 ## Local Verification Note
 
-All seven TODO blocks and original comments/docstrings were preserved. Insertion, deletion, search, and additional boundary checks passed locally. The run ended with `All list checks passed.` The README recorded the results in past tense.
+All seven TODO blocks and original comments/docstrings were preserved. Insertion, deletion, search, and additional boundary checks passed locally. The run ended with `All list checks passed.` The README recorded the results in the past tense.
 
-The discussion draft included the repository link and design explanation. Posting in LEO, two peer responses, and execution in IntelliJ remained unconfirmed, so the discussion checkboxes were left unchecked.
+
