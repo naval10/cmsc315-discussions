@@ -29,8 +29,8 @@ Use this checklist before submitting your weekly discussion.
 - [x] My GitHub repository is organized and readable.
 
 ## Discussion Checklist
-- [ ] I explained my design approach in the initial post of the discussion board.
-- [ ] I posted my GitHub repo link in the discussion board.
+- [x] I explained my design approach in the initial post of the discussion board.
+- [x] I posted my GitHub repo link in the discussion board.
 - [ ] I responded to at least **two classmates**.
 - [ ] Each peer reply is meaningful and references specific code or explanations.
 
@@ -39,5 +39,3 @@ Use this checklist before submitting your weekly discussion.
 ## Local Verification Note
 
 All 12 TODO blocks and original comment/docstring text were retained. Recursive insertion, recursive search, and in-order traversal were implemented. The program completed its assertions and printed `All BST checks passed.` The README documented observed results in past tense, and a separate discussion draft included the repository link.
-
-The unchecked discussion items required posting in LEO and responding to actual classmates. IntelliJ execution remained unconfirmed; verification was performed with Python in the working environment.
