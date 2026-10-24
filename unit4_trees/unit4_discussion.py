@@ -17,14 +17,16 @@ class Node:
         # TODO (Student):
         # Store the node's value and initialize references
         # to the left and right child nodes.
-        pass
+        self.value = value
+        self.left = None
+        self.right = None
 
 
 class BST:
     def __init__(self):
         # TODO (Student):
         # Initialize an empty Binary Search Tree.
-        pass
+        self.root = None
 
     def insert(self, value):
         """
@@ -37,7 +39,9 @@ class BST:
           whether a value is smaller or larger than the
           current node.
         """
-        pass
+        self._validate_id(value)
+        # Preserve the root returned by the helper, including the first insertion.
+        self.root = self._insert_recursive(self.root, value)
 
     def _insert_recursive(self, node, value):
         """
@@ -50,7 +54,15 @@ class BST:
         - Insert larger values into the right subtree.
         - Return the updated node reference.
         """
-        pass
+        if node is None:
+            return Node(value)
+        # Smaller IDs belong on the left; larger IDs belong on the right.
+        if value < node.value:
+            node.left = self._insert_recursive(node.left, value)
+        elif value > node.value:
+            node.right = self._insert_recursive(node.right, value)
+        # Equal IDs are ignored because an employee ID should be unique.
+        return node
 
     def search(self, value):
         """
@@ -63,14 +75,23 @@ class BST:
         - Add comments explaining why BST search is often
           more efficient than linear search.
         """
-        pass
+        self._validate_id(value)
+        # Each comparison eliminates one subtree, not necessarily half the nodes.
+        # A short, balanced tree needs fewer comparisons than a linear scan.
+        return self._search_recursive(self.root, value)
 
     def _search_recursive(self, node, value):
         """
         TODO (Student):
         Implement recursive BST search.
         """
-        pass
+        if node is None:
+            return False
+        if value == node.value:
+            return True
+        if value < node.value:
+            return self._search_recursive(node.left, value)
+        return self._search_recursive(node.right, value)
 
     def inorder(self):
         """
@@ -78,7 +99,9 @@ class BST:
         Return a list containing the values from an
         in-order traversal.
         """
-        pass
+        values = []
+        self._inorder_recursive(self.root, values)
+        return values
 
     def _inorder_recursive(self, node, values):
         """
@@ -92,7 +115,40 @@ class BST:
         - Add comments explaining why this traversal
           produces sorted output in a BST.
         """
-        pass
+        if node is not None:
+            # Left values are smaller; right values are larger, giving sorted output.
+            self._inorder_recursive(node.left, values)
+            values.append(node.value)
+            self._inorder_recursive(node.right, values)
+
+
+    @staticmethod
+    def _validate_id(value):
+        # bool is an int subclass, but True/False are not employee IDs.
+        if type(value) is not int:
+            raise TypeError("Employee ID must be an integer.")
+        if value <= 0:
+            raise ValueError("Employee ID must be positive.")
+
+    def height(self):
+        """Return height in nodes: empty = 0, a single node = 1."""
+        def measure(node):
+            if node is None:
+                return 0
+            return 1 + max(measure(node.left), measure(node.right))
+        return measure(self.root)
+
+    def search_steps(self, value):
+        """Count visited nodes to illustrate the effect of insertion order."""
+        self._validate_id(value)
+        node = self.root
+        steps = 0
+        while node is not None:
+            steps += 1
+            if value == node.value:
+                return steps
+            node = node.left if value < node.value else node.right
+        return steps
 
 
 def main():
@@ -111,7 +167,14 @@ def main():
     # 5. Use comments to explain why a BST is efficient at reducing search space for each step.
 
     print("\n=== TREE CONSTRUCTION ===")
-    print("TODO: Create a BST and insert multiple values.")
+    tree = BST()
+    # Model an employee-ID index, not a complete employee-record database.
+    ids = [1004, 1002, 1006, 1001, 1003, 1005, 1007]
+    for employee_id in ids:
+        tree.insert(employee_id)
+    print("Employee IDs inserted:", ids)
+    # This insertion order creates short paths through both subtrees.
+    print("Height in nodes:", tree.height())
 
     # ===============================
     # TODO (Student): IN-ORDER TRAVERSAL
@@ -124,7 +187,10 @@ def main():
     #    sorted output in a BST.
 
     print("\n=== IN-ORDER TRAVERSAL ===")
-    print("TODO: Display and explain traversal results.")
+    ordered = tree.inorder()
+    print("Employee IDs in sorted order:", ordered)
+    assert ordered == sorted(ids)
+    assert tree.height() == 3
 
     # ===============================
     # TODO (Student): SEARCH TESTS
@@ -136,7 +202,12 @@ def main():
     # 3. Use comments to clearly explain the results.
 
     print("\n=== SEARCH TESTS ===")
-    print("TODO: Demonstrate BST searching.")
+    for employee_id, expected in [(1001, True), (1007, True),
+                                  (999, False), (1008, False)]:
+        found = tree.search(employee_id)
+        print(f"Employee {employee_id}: found = {found}")
+        assert found is expected
+    assert tree.search(1004)  # Also check the root.
 
     # ===============================
     # TODO (Student): EDGE CASES
@@ -153,7 +224,68 @@ def main():
     # Use comments to explain what happens and why.
 
     print("\n=== EDGE CASES ===")
-    print("TODO: Demonstrate and explain an edge case.")
+    empty = BST()
+    print("Empty traversal:", empty.inorder())
+    print("Search empty tree:", empty.search(1001))
+    assert empty.inorder() == [] and not empty.search(1001)
+    assert empty.height() == 0
+
+    single = BST()
+    single.insert(1001)
+    single.insert(1001)
+    print("Single node after duplicate insertion:", single.inorder())
+    assert single.inorder() == [1001] and single.height() == 1
+    assert single.search(1001) and not single.search(1002)
+
+    before = tree.inorder()
+    tree.insert(1004)
+    tree.insert(1001)
+    assert tree.inorder() == before
+    print("Duplicate root and leaf IDs were ignored.")
+
+    # Invalid requests must fail before changing the existing tree.
+    for invalid in [None, "1002", 1002.5, True, 0, -1]:
+        expected_error = TypeError if type(invalid) is not int else ValueError
+        for operation in [tree.insert, tree.search]:
+            try:
+                operation(invalid)
+            except expected_error as error:
+                print(f"{operation.__name__}({invalid!r}): {error}")
+            else:
+                raise AssertionError("Invalid ID should have been rejected.")
+        assert tree.inorder() == before
+
+    # The returned list is a snapshot, not the internal tree.
+    snapshot = tree.inorder()
+    snapshot.append(9999)
+    assert not tree.search(9999)
+    tree.insert(1008)
+    assert tree.search(1008)
+    print("Valid insertion after errors succeeded.")
+
+    print("\n=== INSERTION ORDER AND TREE SHAPE ===")
+    balanced = BST()
+    ascending = BST()
+    descending = BST()
+    for employee_id in ids:
+        balanced.insert(employee_id)
+    for employee_id in sorted(ids):
+        ascending.insert(employee_id)
+    for employee_id in sorted(ids, reverse=True):
+        descending.insert(employee_id)
+    assert balanced.inorder() == ascending.inorder() == descending.inorder()
+    assert balanced.height() == 3
+    assert ascending.height() == descending.height() == 7
+    print("Same IDs, balanced-order height:", balanced.height())
+    print("Same IDs, ascending-order height:", ascending.height())
+    print("Same IDs, descending-order height:", descending.height())
+    print("Search 1007, balanced-order nodes visited:", balanced.search_steps(1007))
+    print("Search 1007, ascending-order nodes visited:", ascending.search_steps(1007))
+    assert balanced.search_steps(1007) == 3
+    assert ascending.search_steps(1007) == 7
+    assert descending.search_steps(1001) == 7
+    print("This BST does not rebalance; long chains can reach Python's recursion limit.")
+    print("\nAll BST checks passed.")
 
 
 
