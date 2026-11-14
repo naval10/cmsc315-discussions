@@ -33,7 +33,17 @@ def main():
 
 
     print("\n=== INSERT OPERATIONS ===")
-    print("TODO: Create a dictionary and add multiple key-value pairs.")
+    # TODO: Create a dictionary and add multiple key-value pairs.
+    # Each immutable SKU identifies one equipment type and its stock count.
+    # A dictionary hashes keys to locate entries instead of scanning all keys.
+    inventory = {}
+    for sku, quantity in [
+        ("ROUTER-01", 5), ("SWITCH-01", 8), ("LAPTOP-01", 12),
+        ("MONITOR-01", 6), ("CABLE-01", 30)
+    ]:
+        inventory[sku] = quantity
+    assert len(inventory) == 5
+    print("IT supply inventory:", inventory)
 
     # ===============================
     # TODO (Student): LOOKUP OPERATIONS
@@ -45,7 +55,12 @@ def main():
     # 3. Add meaningful comments to explain how the lookup works.
 
     print("\n=== LOOKUP OPERATIONS ===")
-    print("TODO: Demonstrate successful key lookups.")
+    # TODO: Demonstrate successful key lookups.
+    # Known keys can be indexed directly; a missing key would raise KeyError.
+    for sku, expected in [("ROUTER-01", 5), ("LAPTOP-01", 12)]:
+        quantity = inventory[sku]
+        assert quantity == expected
+        print(f"{sku}: {quantity} in stock")
 
     # ===============================
     # TODO (Student): UPDATE OPERATIONS
@@ -58,7 +73,14 @@ def main():
     #    a new value.
 
     print("\n=== UPDATE OPERATIONS ===")
-    print("TODO: Demonstrate updating an existing key.")
+    # TODO: Demonstrate updating an existing key.
+    print("Before update:", inventory)
+    old_size = len(inventory)
+    # Reassigning an equal key replaces its value without creating a duplicate.
+    inventory["LAPTOP-01"] = 10
+    assert inventory["LAPTOP-01"] == 10
+    assert len(inventory) == old_size
+    print("After issuing two laptops:", inventory)
 
     # ===============================
     # TODO (Student): DELETE OPERATIONS
@@ -70,7 +92,14 @@ def main():
     # 3. Use comments to explain what happens when a key is removed.
 
     print("\n=== DELETE OPERATIONS ===")
-    print("TODO: Demonstrate deleting a key-value pair.")
+    # TODO: Demonstrate deleting a key-value pair.
+    print("Before deletion:", inventory)
+    # pop removes both the key and value and returns the removed quantity.
+    removed = inventory.pop("MONITOR-01")
+    assert removed == 6 and "MONITOR-01" not in inventory
+    assert len(inventory) == 4
+    print(f"Removed MONITOR-01 with recorded quantity {removed}.")
+    print("After deletion:", inventory)
 
     # ===============================
     # TODO (Student): EDGE CASES
@@ -87,7 +116,47 @@ def main():
     # Explain what happens in each case.
 
     print("\n=== EDGE CASES ===")
-    print("TODO: Demonstrate and explain edge cases.")
+    # TODO: Demonstrate and explain edge cases.
+    # A unique sentinel distinguishes absence from valid values such as zero.
+    missing = object()
+    before = inventory.copy()
+    assert inventory.get("PRINTER-99", missing) is missing
+    assert inventory == before
+    print("Missing lookup: PRINTER-99 was not found; inventory unchanged.")
+
+    assert inventory.pop("PRINTER-99", missing) is missing
+    assert inventory == before
+    print("Missing deletion: safely skipped; inventory unchanged.")
+
+    # Assignment to a new key inserts an entry, even if described as an update.
+    inventory["HEADSET-01"] = 3
+    assert inventory["HEADSET-01"] == 3 and len(inventory) == 5
+    print("Assigning missing HEADSET-01 inserted a new entry.")
+
+    # Zero means out of stock, not a missing equipment type.
+    inventory["CABLE-01"] = 0
+    quantity = inventory.get("CABLE-01", missing)
+    assert quantity == 0 and quantity is not missing
+    print("CABLE-01 exists with zero stock; it is not a missing key.")
+
+    empty = {}
+    assert empty.get("ROUTER-01", missing) is missing
+    assert empty.pop("ROUTER-01", missing) is missing
+    assert len(empty) == 0
+    print("Empty inventory: lookup and deletion safely reported no entry.")
+
+    # Mutable lists cannot be dictionary keys; catch the expected TypeError.
+    before = inventory.copy()
+    try:
+        inventory[["BAD-SKU"]] = 1
+    except TypeError:
+        print("Invalid list key: TypeError handled; use an immutable SKU.")
+    else:
+        raise AssertionError("An unhashable list key should be rejected.")
+    assert inventory == before
+
+    print("Final inventory:", inventory)
+    print("\nAll insertion, lookup, update, deletion, and edge-case assertions passed.")
 
 
 
