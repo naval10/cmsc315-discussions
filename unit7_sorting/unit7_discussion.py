@@ -28,7 +28,17 @@ def bubble_sort(lst):
     - Add meaningful comments.
 
     """
-    pass
+    result = lst.copy()
+    for end in range(len(result)-1, 0, -1):
+        changed = False
+        for i in range(end):
+            # Move the larger neighbor toward the sorted suffix.
+            if result[i] > result[i+1]:
+                result[i], result[i+1] = result[i+1], result[i]
+                changed = True
+        if not changed:
+            break
+    return result
 
 
 def merge_sort(lst):
@@ -45,7 +55,11 @@ def merge_sort(lst):
     - Add meaningful comments.
 
     """
-    pass
+    if len(lst) < 2:
+        return lst.copy()
+    mid = len(lst)//2
+    # Each recursive call handles a strictly smaller list.
+    return merge(merge_sort(lst[:mid]), merge_sort(lst[mid:]))
 
 
 def merge(left, right):
@@ -60,7 +74,27 @@ def merge(left, right):
     - Return the merged sorted list.
     - Add meaningful comments.
     """
-    pass
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        # Taking the left item on ties preserves the original tie order.
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+
+def compare(values):
+    original = values.copy()
+    bubble, merged = bubble_sort(values), merge_sort(values)
+    print("Original:", original, "| Bubble:", bubble, "| Merge:", merged)
+    assert bubble == merged == sorted(original)
+    assert values == original
 
 
 def main():
@@ -78,7 +112,8 @@ def main():
     # 5. Clearly label and display all results.
 
     print("\n=== DATASET #1 ===")
-    print("TODO: Create an unsorted dataset and test both sorting algorithms.")
+    # TODO: Create an unsorted dataset and test both sorting algorithms.
+    compare([42, 19, 88, 7, 31, 12, 55])
 
     # ===============================
     # TODO (Student): DATASET #2
@@ -91,7 +126,8 @@ def main():
     # 4. Compare the results.
 
     print("\n=== DATASET #2 ===")
-    print("TODO: Create a second dataset and compare sorting results.")
+    # TODO: Create a second dataset and compare sorting results.
+    compare([76, 24, 61, 11, 39, 24, 15])
 
     # ===============================
     # TODO (Student): EDGE CASES
@@ -109,7 +145,16 @@ def main():
     # Explain what happens in each case.
 
     print("\n=== EDGE CASE TESTS ===")
-    print("TODO: Demonstrate and explain edge cases.")
+    # TODO: Demonstrate and explain edge cases.
+    for label, values in [("Empty: nothing to move", []), ("Singleton: already sorted", [8]),
+                          ("Sorted: bubble stops after one pass", [1, 2, 3]),
+                          ("Reverse: every pair is inverted", [3, 2, 1]),
+                          ("Duplicates: both copies survive", [4, 1, 4])]:
+        print(label)
+        compare(values)
+    print("Supplier quotes for the same keyboard, lowest first:")
+    compare([39, 27, 31, 27])
+    print("All checks passed.")
 
 
 
