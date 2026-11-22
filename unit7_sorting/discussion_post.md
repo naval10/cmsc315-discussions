@@ -1,4 +1,14 @@
-Repository: https://github.com/naval10/cmsc315-discussions/tree/master/unit7_sorting
+# Unit 7 Discussion Post
+
+Repository: https://github.com/naval10/cmsc315-discussions
+
+Unit 7 files: https://github.com/naval10/cmsc315-discussions/tree/master/unit7_sorting
+
+## Design Approach
+
+I gave both algorithms the same list and checked each result against Python’s sorted output. I also checked that the original list stayed unchanged. To see how each algorithm handled different inputs, I tried an empty list, a single item, and lists with sorted, reversed, and duplicate values.
+
+## Reflection
 
 I used supplier quotes for the same keyboard to compare bubble sort and merge sort. Both returned [27, 27, 31, 39] and left the original quotes in arrival order. Keeping both $27 quotes mattered because two suppliers could offer the same price.
 
